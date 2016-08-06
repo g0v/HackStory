@@ -3,7 +3,7 @@
 var CLIENT_ID = '540045535516-bd21gnjkb2g2rsof4bah1p3i904njtk0.apps.googleusercontent.com';
 var SPREADSHEET_ID = getFromSearchString('source') || '1Pn6E321fuwnrvgoLrl6Qsrb2aPbL9hN9ahptedPtSQE';
 var SHEET_NAMES = (getFromSearchString('sheets') || 'od1').split(',');
-var SCOPES = ["https://www.googleapis.com/auth/spreadsheets.readonly"];
+var SCOPES = ["https://www.googleapis.com/auth/spreadsheets"];
 
 var loginButton = document.querySelector('#login');
 
@@ -46,8 +46,8 @@ var columnNameForSheets = {};
 function fetchColumnHeaders() {
   gapi.client.sheets.spreadsheets.values.batchGet({
     spreadsheetId: SPREADSHEET_ID,
-    ranges: SHEET_NAMES.map(function(name){
-      return `${name}!A1:1`
+    ranges: SHEET_NAMES.map(function(sheetName){
+      return `${sheetName}!A1:1`
     }),
   }).then(function(response) {
     response.result.valueRanges.forEach(function(data, i){
@@ -62,9 +62,32 @@ function fetchColumnHeaders() {
   });
 }
 
-function addEvent() {
+// Usage: addEvent('od1', {Year: 2013, Month: 12, ...(keys in the column)...})
+//
+function addEvent(sheetName, dataObj) {
+  if(!columnNameForSheets[sheetName]) {
+    throw Error('This sheet is not loaded');
+  }
 
+  var row = columnNameForSheets[sheetName].map(function(columnName){
+    return dataObj[columnName];
+  });
+
+  return gapi.client.sheets.spreadsheets.values.append({
+    spreadsheetId: SPREADSHEET_ID,
+    range: 'A1:ZZ1',
+    valueInputOption: 'USER_ENTERED',
+    // insertDataOption: 'INSERT_ROWS',
+    resource: {
+      range: 'A1:ZZ1',
+      majorDimension: 'ROWS',
+      values: [row],
+    },
+  })
 }
+
+// Utils
+//
 
 function getFromSearchString(key) {
   var matches = (RegExp(`${key}=([^&]+)`)).exec(location.search);
