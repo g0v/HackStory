@@ -1,0 +1,23 @@
+{
+  "name": "hacktimeline",
+  "version": "1.0.0",
+  "description": "HackTimeline共筆時間軸 (prototype)",
+  "main": "index.js",
+  "directories": {
+    "doc": "doc"
+  },
+  "scripts": {
+    "start": "python -m SimpleHTTPServer",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/g0v/HackTimeline.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/g0v/HackTimeline/issues"
+  },
+  "homepage": "https://github.com/g0v/HackTimeline#readme"
+}
