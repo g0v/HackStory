@@ -1,7 +1,9 @@
 # HackTimeline
 HackTimeline共筆時間軸 (prototype)
 
-## Start web server
+Prototype: http://g0v.github.io/HackTimeline/
+
+## Development
 
 ```
 $ npm start
