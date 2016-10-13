@@ -11,7 +11,14 @@ authentication occurs when needed (addRow).
 
 (function(){
 
-var API_KEY = 'AIzaSyBYr-2QBLt22nCm51NLWUAc0mHNB79HufA';
+// Your Client ID can be retrieved from your project in the Google
+// Developer Console, https://console.developers.google.com
+const CLIENT_ID = '540045535516-bd21gnjkb2g2rsof4bah1p3i904njtk0.apps.googleusercontent.com';
+const SCOPES = ["https://www.googleapis.com/auth/spreadsheets"];
+
+// For accessing public spreadsheet without login
+//
+const API_KEY = 'AIzaSyBYr-2QBLt22nCm51NLWUAc0mHNB79HufA';
 
 var apiLoaded = false;
 var onApiLoad = function() {}; // no-op by default
@@ -44,6 +51,24 @@ function getClient() {
   }
 }
 
+function authorize(immediate = false) {
+  return new Promise((resolve, reject) => {
+    gapi.auth.authorize({
+      'client_id': CLIENT_ID,
+      'scope': SCOPES.join(' '),
+      'immediate': immediate,
+    }, function(authResult){
+      if(authResult && !authResult.error) {
+        // The user has logged in before.
+        //
+        resolve(authResult)
+      } else {
+        reject(authResult && authResult.error)
+      }
+    });
+  })
+}
+
 function readSheets(spreadSheetId, sheetNames) {
   return getClient()
   .then(function () {
@@ -68,7 +93,7 @@ function readSheets(spreadSheetId, sheetNames) {
 }
 
 function appendRow(spreadSheetId, sheetName, row) {
-
+  // needs auth
 }
 
 function handleError(reason) {
