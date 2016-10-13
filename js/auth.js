@@ -1,11 +1,27 @@
+(function() {
+
+
 // Your Client ID can be retrieved from your project in the Google
 // Developer Console, https://console.developers.google.com
 var CLIENT_ID = '540045535516-bd21gnjkb2g2rsof4bah1p3i904njtk0.apps.googleusercontent.com';
+var SCOPES = ["https://www.googleapis.com/auth/spreadsheets"];
 var SPREADSHEET_ID = getFromSearchString('source') || '1Pn6E321fuwnrvgoLrl6Qsrb2aPbL9hN9ahptedPtSQE';
 var SHEET_NAMES = (getFromSearchString('sheets') || 'od1').split(',');
-var SCOPES = ["https://www.googleapis.com/auth/spreadsheets"];
+
+window.getSpreadsheet = () => {
+  return Promise((resolve, reject) => {
+
+  })
+}
+
+});
+
+
 
 var loginButton = document.querySelector('#login');
+
+
+
 
 // Invoked after google loads js.
 //
