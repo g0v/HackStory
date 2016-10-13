@@ -9,38 +9,34 @@ authentication occurs when needed (addRow).
 
 (function(){
 
-var clientLoaded = false;
 var apiLoaded = false;
+var onApiLoad = function() {
+  apiLoaded = true;
+};
 
-// Initial _clientOnload implementation
+// Invoked by google api initial load
 //
 window._clientOnload = function() {
-  clientLoaded = true;
+  gapi.client.load('https://sheets.googleapis.com/$discovery/rest?version=v4').then(onApiLoad);
 };
 
 // Resolves to gapi.client with api loaded.
 //
 function getClient() {
   var loadingPromise;
-  if(!clientLoaded) {
-    loadingPromise = new Promise(function(resolve, reject){
-      // _clientOnload not invoked yet, override it with resolve() inside.
-      //
-      window._clientOnload = function() {
-        clientLoaded = true;
-        resolve(gapi.client.load('https://sheets.googleapis.com/$discovery/rest?version=v4'));
-      };
-    });
-  } else if(!apiLoaded) {
-    loadingPromise = gapi.client.load('https://sheets.googleapis.com/$discovery/rest?version=v4');
-  } else {
-    loadingPromise = Promise.resolve(gapi.client);
-  }
+  if(!apiLoaded) {
+    // Override the existing onApiLoad so that it resolves the Promise on load
+    //
+    return new Promise(function(resolve) {
+      onApiLoad = function() {
+        apiLoaded = true;
+        resolve(gapi.client);
+      }
+    })
 
-  return loadingPromise.then(() => {
-    apiLoaded = true;
-    return gapi.client;
-  });
+  } else { // already loaded
+    return Promise.resolve(gapi.client);
+  }
 }
 
 function readSheets(spreadSheetId, sheetNames) {
