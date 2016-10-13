@@ -2,7 +2,7 @@
 spreadsheet.js -- provides low-level sheet access with Google.
 
 readSheets(spreadsheetId, sheetNames) => promise<{sheetName1: 2d array of the sheet data, sheetName2:...}>
-// spreadsheet.readSheets('1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms', ['Class Data']).then(data => console.log(data))
+// spreadsheet.readSheets('1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms', ['Class Data']).then(data => console.log('response', data))
 
 appendRow(spreadsheetId, sheetName, row) => promise<{sheetName: new 2d array of the sheet data}>
 
@@ -45,22 +45,25 @@ function getClient() {
 }
 
 function readSheets(spreadSheetId, sheetNames) {
-  return getClient().then(function () {
+  return getClient()
+  .then(function () {
     return gapi.client.sheets.spreadsheets.values.batchGet({
       spreadsheetId: spreadSheetId,
       ranges: sheetNames.map(function(sheetName){
-        return `${sheetName}!A1:1`
+        return `${sheetName}`
       }),
     })
-  }, handleError).then(function(response) {
-    console.log(response);
+  }, handleError)
+  .then(function(response) {
+    return getIn(response)(['result', 'valueRanges'], []).reduce((result, valueRange, i) => {
+      result[sheetNames[i]] = valueRange.values || [];
+      return result;
+    }, {});
   }, function(reason) {
     if(getIn(reason)(['result', 'error', 'code']) === 400) {
       throw new Error('spreadSheetId or sheetNames does not exist.');
     }
-    else {
-      throw reason;
-    }
+    handleError(reason);
   });
 }
 
