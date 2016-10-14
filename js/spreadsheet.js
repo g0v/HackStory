@@ -1,13 +1,6 @@
 /*
-spreadsheet.js -- provides low-level sheet access with Google.
-
-readSheets(spreadsheetId, sheetNames) => promise<{sheetName1: 2d array of the sheet data, sheetName2:...}>
-// spreadsheet.readSheets('1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms', ['Class Data']).then(data => console.log('response', data))
-
-appendRow(spreadsheetId, sheetName, row) => promise<{sheetName: new 2d array of the sheet data}>
-
-authentication occurs when needed (addRow).
-*/
+ * spreadsheet.js -- provides low-level sheet access with Google.
+ */
 
 (function(){
 
@@ -32,6 +25,60 @@ window._clientOnload = function() {
     onApiLoad();
   });
 };
+
+// Given spreadsheet id and array of sheet names,
+// returns a promise that resolves to an object like:
+// {sheetName1: <2d array of the sheet data>, sheetName2: <...>, ...}>
+//
+// Usage: spreadsheet.readSheets('1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms', ['Class Data']).then(data => console.log('response', data))
+//
+function readSheets(spreadSheetId, sheetNames) {
+  return getClient()
+  .then(() => es6Promisify(gapi.client.sheets.spreadsheets.values.batchGet({
+    spreadsheetId: spreadSheetId,
+    ranges: sheetNames.map(function(sheetName){
+      return `${sheetName}`
+    }),
+  })))
+  .then(response => {
+    return getIn(response)(['result', 'valueRanges'], []).reduce((result, valueRange, i) => {
+      result[sheetNames[i]] = valueRange.values || [];
+      return result;
+    }, {});
+  })
+  .catch(reason => {
+    if(getIn(reason)(['result', 'error', 'code']) === 400) {
+      throw new Error('spreadSheetId or sheetNames does not exist.');
+    }
+  });
+}
+
+// Given a spreadsheet ID, sheet name and row (1-d array) to insert,
+// Returns a promise that resolves to UpdateValuesResponse.
+// (See: https://developers.google.com/sheets/reference/rest/v4/UpdateValuesResponse )
+//
+// Usage: spreadsheet.appendRow('1QYSuMMLSfAe8bYz0urXwDVppJ87S5CLafQbvyptZsQw', 'Sheet1', ['apple', 'banana', 'pineapple', 'ppap']).then(d => console.log(d))
+//
+function appendRow(spreadSheetId, sheetName, row) {
+  return getClient()
+  .then(() => authorize(false))
+  .then(() => es6Promisify(gapi.client.sheets.spreadsheets.values.append({
+    spreadsheetId: spreadSheetId,
+    range: sheetName,//`"${}"!A1:ZZ1`,
+    valueInputOption: 'USER_ENTERED',
+    insertDataOption: 'INSERT_ROWS',
+    resource: {
+      range: sheetName,//'A1:ZZ1',
+      majorDimension: 'ROWS',
+      values: [row],
+    },
+  })))
+  .then(response => getIn(response)(['result', 'updates']));
+}
+
+//
+// Utility functions
+//
 
 // Resolves to gapi.client with api loaded.
 //
@@ -61,42 +108,16 @@ function authorize(immediate = false) {
       if(authResult && !authResult.error) {
         // The user has logged in before.
         //
-        resolve(authResult)
+        resolve(authResult);
       } else {
-        reject(authResult && authResult.error)
+        reject(authResult.error);
       }
     });
   })
 }
 
-function readSheets(spreadSheetId, sheetNames) {
-  return getClient()
-  .then(() => es6Promisify(gapi.client.sheets.spreadsheets.values.batchGet({
-    spreadsheetId: spreadSheetId,
-    ranges: sheetNames.map(function(sheetName){
-      return `${sheetName}`
-    }),
-  })))
-  .then(response => {
-    return getIn(response)(['result', 'valueRanges'], []).reduce((result, valueRange, i) => {
-      result[sheetNames[i]] = valueRange.values || [];
-      return result;
-    }, {});
-  })
-  .catch(reason => {
-    if(getIn(reason)(['result', 'error', 'code']) === 400) {
-      throw new Error('spreadSheetId or sheetNames does not exist.');
-    }
-  });
-}
-
-function appendRow(spreadSheetId, sheetName, row) {
-  // needs auth
-}
-
-// Utility functions
+// Fetch data in nested object. Return defaultValue if data cannot be retrieved.
 //
-
 function getIn(rootObj) {
   return function(keyPath, defaultValue) {
     const result = (keyPath || []).reduce(
