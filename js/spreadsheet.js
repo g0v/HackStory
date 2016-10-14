@@ -13,19 +13,6 @@ const SCOPES = ["https://www.googleapis.com/auth/spreadsheets"];
 //
 const API_KEY = 'AIzaSyBYr-2QBLt22nCm51NLWUAc0mHNB79HufA';
 
-var apiLoaded = false;
-var onApiLoad = function() {}; // no-op by default
-
-// Invoked by google api initial load
-//
-window._clientOnload = function() {
-  gapi.client.setApiKey(API_KEY); // for public spreadsheet access without logging in
-  es6Promisify(gapi.client.load('https://sheets.googleapis.com/$discovery/rest?version=v4')).then(() => {
-    apiLoaded = true;
-    onApiLoad();
-  });
-};
-
 // Given spreadsheet id and array of sheet names,
 // returns a promise that resolves to an object like:
 // {sheetName1: <2d array of the sheet data>, sheetName2: <...>, ...}>
@@ -79,6 +66,19 @@ function appendRow(spreadSheetId, sheetName, row) {
 //
 // Utility functions
 //
+
+var apiLoaded = false;
+var onApiLoad = function() {}; // no-op by default
+
+// Invoked by google api initial load
+//
+window._clientOnload = function() {
+  gapi.client.setApiKey(API_KEY); // for public spreadsheet access without logging in
+  es6Promisify(gapi.client.load('https://sheets.googleapis.com/$discovery/rest?version=v4')).then(() => {
+    apiLoaded = true;
+    onApiLoad();
+  });
+};
 
 // Resolves to gapi.client with api loaded.
 //
@@ -137,6 +137,9 @@ function es6Promisify(thenable) {
     thenable.then(resolve, reject);
   });
 }
+
+// Exporting stuff
+//
 
 window.spreadsheet = {
   readSheets: readSheets,
