@@ -27,7 +27,7 @@ var onApiLoad = function() {}; // no-op by default
 //
 window._clientOnload = function() {
   gapi.client.setApiKey(API_KEY); // for public spreadsheet access without logging in
-  gapi.client.load('https://sheets.googleapis.com/$discovery/rest?version=v4').then(() => {
+  es6Promisify(gapi.client.load('https://sheets.googleapis.com/$discovery/rest?version=v4')).then(() => {
     apiLoaded = true;
     onApiLoad();
   });
@@ -71,24 +71,22 @@ function authorize(immediate = false) {
 
 function readSheets(spreadSheetId, sheetNames) {
   return getClient()
-  .then(function () {
-    return gapi.client.sheets.spreadsheets.values.batchGet({
-      spreadsheetId: spreadSheetId,
-      ranges: sheetNames.map(function(sheetName){
-        return `${sheetName}`
-      }),
-    })
-  }, handleError)
-  .then(function(response) {
+  .then(() => es6Promisify(gapi.client.sheets.spreadsheets.values.batchGet({
+    spreadsheetId: spreadSheetId,
+    ranges: sheetNames.map(function(sheetName){
+      return `${sheetName}`
+    }),
+  })))
+  .then(response => {
     return getIn(response)(['result', 'valueRanges'], []).reduce((result, valueRange, i) => {
       result[sheetNames[i]] = valueRange.values || [];
       return result;
     }, {});
-  }, function(reason) {
+  })
+  .catch(reason => {
     if(getIn(reason)(['result', 'error', 'code']) === 400) {
       throw new Error('spreadSheetId or sheetNames does not exist.');
     }
-    handleError(reason);
   });
 }
 
@@ -96,10 +94,8 @@ function appendRow(spreadSheetId, sheetName, row) {
   // needs auth
 }
 
-function handleError(reason) {
-  console.error(reason);
-  throw reason;
-}
+// Utility functions
+//
 
 function getIn(rootObj) {
   return function(keyPath, defaultValue) {
@@ -111,7 +107,15 @@ function getIn(rootObj) {
     return result === undefined ? defaultValue : result;
   }
 }
-window.getIn = getIn;
+
+// The "promise" returned by GOogle API Client Library does not have ".catch"
+// so we wrap with the browser's promise implementation (es6 promise) to get .catch() working.
+//
+function es6Promisify(thenable) {
+  return new Promise((resolve, reject) => {
+    thenable.then(resolve, reject);
+  });
+}
 
 window.spreadsheet = {
   readSheets: readSheets,
