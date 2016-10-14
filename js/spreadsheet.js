@@ -3,9 +3,14 @@
  */
 
 (function(){
+// When creating spreadsheet, this will be the template spreadsheet to copy
+// to the user's Google Drive.
+//
+const TEMPLATE_SPREADSHEET_ID = '1QYSuMMLSfAe8bYz0urXwDVppJ87S5CLafQbvyptZsQw';
 
 // Your Client ID can be retrieved from your project in the Google
 // Developer Console, https://console.developers.google.com
+//
 const CLIENT_ID = '540045535516-bd21gnjkb2g2rsof4bah1p3i904njtk0.apps.googleusercontent.com';
 const SCOPES = ["https://www.googleapis.com/auth/spreadsheets"];
 
@@ -61,6 +66,22 @@ function appendRow(spreadSheetId, sheetName, row) {
     },
   })))
   .then(response => getIn(response)(['result', 'updates']));
+}
+
+function create(spreadsheet = {}) {
+  let spreadsheetId;
+  return getClient()
+  .then(() => authorize(false))
+  .then(() => es6Promisify(gapi.client.sheets.spreadsheets.get({
+    spreadsheetId: TEMPLATE_SPREADSHEET_ID,
+    includeGridData: true,
+  })))
+  .then(response => {
+    const sheet = getIn(response)(['result', 'sheets', 0]);
+    return es6Promisify(gapi.client.sheets.spreadsheets.create({
+      resource: Object.assign({}, spreadsheet, {sheets: [ sheet ]}),
+    }));
+  })
 }
 
 //
@@ -142,8 +163,9 @@ function es6Promisify(thenable) {
 //
 
 window.spreadsheet = {
-  readSheets: readSheets,
-  appendRow: appendRow,
+  readSheets,
+  appendRow,
+  create,
 };
 
 }());
