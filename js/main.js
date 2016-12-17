@@ -52,7 +52,7 @@ function openEntryForm (e) {
 function renderData (data) {
   if (data) spreadsheetData = data
 
-  // Timeline render code goes here
+  // Timeline render code goes here, @ddio feel free to nuke this part
   container.innerHTML = ''
 
   Object.keys(spreadsheetData).forEach(timelineName => {
