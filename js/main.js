@@ -63,7 +63,7 @@ function renderData (data) {
     const newEntry = document.createElement('button')
     newEntry.type = 'button'
     newEntry.innerText = '新增事件'
-    newEntry.className = 'fr f5 ba bg-transparent pa1'
+    newEntry.className = 'fr f5 ba bg-transparent pa2 fw6'
     newEntry.setAttribute('data-timeline', timelineName)
     newEntry.addEventListener('click', openEntryForm)
 
