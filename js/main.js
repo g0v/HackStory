@@ -56,14 +56,17 @@ function renderData (data) {
   container.innerHTML = ''
 
   Object.keys(spreadsheetData).forEach(timelineName => {
-    const h1 = document.createElement('span')
-    h1.className ='cf f4'
+    const timeline = document.createElement('div')
+    timeline.className = 'mb3'
+
+    const h1 = document.createElement('h1')
+    h1.className ='cf f4 dib mt0'
     h1.innerText = timelineName
 
     const newEntry = document.createElement('button')
     newEntry.type = 'button'
     newEntry.innerText = '新增事件'
-    newEntry.className = 'fr f5 ba bg-transparent pa2 fw6'
+    newEntry.className = 'ml3 f5 ba bg-transparent pa2 fw6 v-baseline pointer'
     newEntry.setAttribute('data-timeline', timelineName)
     newEntry.addEventListener('click', openEntryForm)
 
@@ -72,9 +75,11 @@ function renderData (data) {
 
     spreadsheetData[timelineName].forEach((fields, i) => {
       if (i === 0) return
-      const p = document.createElement('p')
-      p.innerHTML = fields.map((v, i) => headers[i] + ': ' + v).join('<br>')
-      container.appendChild(p)
+      const div = document.createElement('div')
+      div.className = 'dib mr2 pa2 v-middle h4 w5 overflow-auto ba'
+      div.innerHTML = fields.map((v, i) => headers[i] + ': ' + v).join('<br>')
+      timeline.appendChild(div)
     })
+    container.appendChild(timeline)
   })
 }
