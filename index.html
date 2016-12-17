@@ -26,9 +26,9 @@
     <form id="spreadsheet" class="border-box mv3 ba pa3 mw6 w-100 center b--light-silver">
       <h2 class="f4 mt0">讀取時間軸</h2>
       <label for="spreadsheet-id" class="mb2 db">Spreadsheet ID</label>
-      <input type="text" name="spreadsheetId" id="spreadsheet-id" class="code db w-100 pa2 mb3" value="11hHSbluBcNfMYppvSMTfB9Pg4fHmJMvmduoaHFCXREE">
+      <input type="text" name="spreadsheetId" id="spreadsheet-id" class="code db w-100 pa2 mb3" value="11hHSbluBcNfMYppvSMTfB9Pg4fHmJMvmduoaHFCXREE" required>
       <label for="sheet-names" class="mb2 db">Name of sheets</label>
-      <input type="text" name="sheets" id="sheet-names" class="db w-100 pa2 mb3" value="同婚立法,平權運動">
+      <input type="text" name="sheets" id="sheet-names" class="db w-100 pa2 mb3" value="同婚立法,平權運動" required>
       <button type="submit" class="pv2 ph3 border bg-black pointer white bn hover-bg-dark-green fw6">讀取</button>
     </form>
 
@@ -37,15 +37,17 @@
 
       <h2 class="f4 mt0">新增事件</h2>
       <label for="Timeline-select" class="mb2 db">Timeline</label>
-      <select id="Timeline-select" class="code db w-100 pa2 mb3 mt1"></select>
+      <select id="Timeline-select" class="code db w-100 pa2 mb3 mt1" required></select>
       <label for="Date" class="mb2 db">Date</label>
-      <input id="Date" type="text" class="code db w-100 pa2 mb3" value="2016/12/26">
+      <input id="Date" type="text" class="code db w-100 pa2 mb3" value="2016/12/26" required>
       <label for="Time" class="mb2 db">Time</label>
       <input id="Time" type="text" class="code db w-100 pa2 mb3" value="09:00">
       <label for="Location" class="mb2 db">Location</label>
       <input id="Location" type="text" class="code db w-100 pa2 mb3" value="立法院前">
+      <label for="Title" class="mb2 db">Title</label>
+      <input id="Title" type="text" class="code db w-100 pa2 mb3" value="爭取婚姻平權 用愛守護立院">
       <label for="Description" class="mb2 db">Description</label>
-      <input id="Description" type="text" class="code db w-100 pa2 mb3" value="爭取婚姻平權 用愛守護立院">
+      <input id="Description" type="text" class="code db w-100 pa2 mb3" value="">
 
       <button type="submit" class="pv2 ph3 border bg-black pointer white bn hover-bg-dark-green fw6 pointer">新增</button>
     </form>
