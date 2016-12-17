@@ -23,17 +23,20 @@ form.addEventListener('submit', (e) => {
 
 entryForm.addEventListener('submit', (e) => {
   e.preventDefault()
+  e.target.disabled = true
 
   const sheetName = entryForm.querySelector('#Timeline-select').value
   const rowData = headers.map(header => entryForm.querySelector('#' + header).value)
   const result = spreadsheet.appendRow(entryForm.getAttribute('data-id'), sheetName, rowData)
   result.then(r => {
     alert('Success!')
+    e.target.disabled = false
     spreadsheetData[sheetName].push(rowData)
     entryForm.hidden = true
 
     renderData()
   }).catch(obj => {
+    e.target.disabled = false
     alert(obj.result.error.message)
   })
 })
