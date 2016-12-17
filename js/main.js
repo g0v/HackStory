@@ -1,5 +1,4 @@
-const headers = ["Date", "Time", "Location", "Description"]
-const sampleData = ["2016/12/15", "00:00", "Taiwan", "Cool description"]
+const headers = ["Date", "Time", "Location", "Title", "Description"]
 const form = document.getElementById('spreadsheet')
 const entryForm = document.getElementById('entry-form')
 const container = document.getElementById('timeline-container')
@@ -101,8 +100,9 @@ const sheetHeaders = {
     startTime: 1,
     endDate: 99,
     endTime: 99,
-    title: 2,
-    content: 3
+    location: 2,
+    title: 3,
+    content: 4
 }
 
 // input - result from spreadsheet.readSheets
@@ -146,6 +146,7 @@ function renderTimeline( spreadsheet, container ) {
                 id: curEventId,
                 title: row[ sheetHeaders.title ],
                 content: row[ sheetHeaders.content ],
+                location: row[ sheetHeaders.location ],
                 group: curGroupId,
             };
 
@@ -169,13 +170,18 @@ function renderTimeline( spreadsheet, container ) {
 
     var opts = {
         template: function( item ) {
-            if( item.title ) {
-                return '<h3 class="mt0 f5 mb1">' + item.title + '</h3>' + item.content;
-            }
-            return item.content;
+          return generateHTML(item);
         }
     }
 
     var tl = new vis.Timeline( container, timelineItems, groups, opts );
 }
 
+function generateHTML (item) {
+  html = ''
+  if (item.title) html += '<h3 class="mt0 f5 mb1">' + item.title + '</h3>'
+  if (item.content) html += '<p class="mt1 f6">' + item.content + '</p>'
+  if (item.location) html += '<span class="fw4 f6 black-80">@ ' + item.location + '</span>'
+
+  return '<div class="ma1">' + html + '</div>'
+}
