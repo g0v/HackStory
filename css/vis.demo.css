@@ -1,0 +1,26 @@
+.navbar.navbar-fixed-top {
+    background-color: #4b4b4b;
+}
+
+.navbar-fixed-top .navbar-brand {
+    color: #fff;
+}
+
+.vis-item .vis-item-content {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-height: 120px;
+}
+
+.vis-labelset .vis-label {
+    display: table;
+}
+
+.vis-labelset .vis-label .vis-inner {
+    display: table-cell;
+    vertical-align: middle;
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
