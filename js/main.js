@@ -7,7 +7,7 @@ let spreadsheetData = {}
 
 entryForm.querySelector('#close-entry-form').addEventListener('click', e => entryForm.hidden = true)
 
-form.addEventListener('submit', function loadSheets (e) {
+form.addEventListener('submit', (e) => {
   e.preventDefault()
   const spreadsheetId = form.querySelector('#spreadsheet-id').value.trim()
   const sheets = form.querySelector('#sheet-names').value.split(',').map(name => name.trim())
@@ -18,7 +18,7 @@ form.addEventListener('submit', function loadSheets (e) {
   form.hidden = true
 })
 
-entryForm.addEventListener('submit', (e) =>{
+entryForm.addEventListener('submit', (e) => {
   e.preventDefault()
 
   const sheetName = entryForm.querySelector('#Timeline-select').value
