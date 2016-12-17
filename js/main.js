@@ -3,6 +3,7 @@ const sampleData = ["2016/12/15", "00:00", "Taiwan", "Cool description"]
 const form = document.getElementById('spreadsheet')
 const entryForm = document.getElementById('entry-form')
 const container = document.getElementById('timeline-container')
+const loadBtn = document.getElementById('load-spreadsheet')
 let spreadsheetData = {}
 
 entryForm.querySelector('#close-entry-form').addEventListener('click', e => entryForm.hidden = true)
@@ -14,8 +15,10 @@ form.addEventListener('submit', (e) => {
 
   spreadsheet.readSheets(spreadsheetId, sheets).then(renderData)
   updateEntryForm(spreadsheetId, sheets)
+  loadBtn.innerText = 'Loaded: ' + spreadsheetId
 
   form.hidden = true
+  container.hidden = false
 })
 
 entryForm.addEventListener('submit', (e) => {
@@ -33,6 +36,11 @@ entryForm.addEventListener('submit', (e) => {
   }).catch(obj => {
     alert(obj.result.error.message)
   })
+})
+
+loadBtn.addEventListener('click', (e) => {
+  container.hidden = form.hidden
+  form.hidden = !form.hidden
 })
 
 function updateEntryForm (spreadsheetId, sheets) {
@@ -75,7 +83,7 @@ function renderData (data) {
 
     container.appendChild(timelineAction)
   })
-    
+
   const timeline = document.createElement('div');
   container.appendChild(timeline);
   renderTimeline( data, timeline );
@@ -92,7 +100,7 @@ const sheetHeaders = {
 
 // input - result from spreadsheet.readSheets
 // format: {
-//     <sheet name>: [ 
+//     <sheet name>: [
 //       [ <cellA1>, <colB1>, <colC1> ],
 //       [ <cellA2>, <colB2>, <colC2> ],
 // }
@@ -127,7 +135,7 @@ function renderTimeline( spreadsheet, container ) {
             if( row[ sheetHeaders.startDate ] ) {
 
                 timelineItem.start = row[ sheetHeaders.startDate ] + ' ' + row[ sheetHeaders.startTime ];
-            
+
                 if( row[ sheetHeaders.endDate ] ) {
                     timelineItem.end = row[ sheetHeaders.endDate ] + ' ' + row[ sheetHeaders.endTime ];
                 }

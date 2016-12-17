@@ -10,17 +10,20 @@
         <link rel="stylesheet" href="css/vis.min.css">
     <script src="js/vendor/modernizr-2.8.3.min.js"></script>
   </head>
-  <body class="sans-serif fw-4">
+  <body class="sans-serif fw-4 ph3 pt5">
     <!--[if lt IE 8]>
         <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
 
     <!-- Add your site or application content here -->
-    <header class="bg-black white pa3 tc">
+    <header class="bg-black white pa3 fw6 left-0 right-0 top-0 absolute">
+      <button type="button" class="truncate mw5 pointer fr f6 pa1 ph2 bg-white black code f6 br2 fw4 bn" id="load-spreadsheet">
+        Load spreadsheet
+      </button>
       HackStory
     </header>
 
-    <form id="spreadsheet" class="mt3 ba pa3 w-40 center b--light-silver">
+    <form id="spreadsheet" class="border-box mv3 ba pa3 mw6 w-100 center b--light-silver">
       <h1 class="f4 mt0">讀取時間軸</h1>
       <label for="spreadsheet-id" class="mb2 db">Spreadsheet ID</label>
       <input type="text" id="spreadsheet-id" class="code db w-100 pa2 mb3" value="11hHSbluBcNfMYppvSMTfB9Pg4fHmJMvmduoaHFCXREE">
@@ -29,7 +32,7 @@
       <button type="submit" class="pv2 ph3 border bg-black pointer white bn hover-bg-dark-green fw6">讀取</button>
     </form>
 
-    <form id="entry-form" class="absolute bg-white-90 mt3 right-1 ba pa3 w-30" hidden>
+    <form id="entry-form" class="absolute bg-white-90 ma3 right-1 ba pa3 w-100 mw5 z-9999" hidden>
       <button type="button" class="fr bg-transparent bn" id="close-entry-form">&times;</button>
 
       <h1 class="f4 mt0">新增事件</h1>
@@ -47,7 +50,7 @@
       <button type="submit" class="pv2 ph3 border bg-black pointer white bn hover-bg-dark-green fw6 pointer">新增</button>
     </form>
 
-    <div id="timeline-container" class="pa3"></div>
+    <div id="timeline-container"></div>
 
     <script src="js/vendor/jquery-1.12.0.min.js"></script>
     <script src="js/vendor/vis.min.js"></script>
