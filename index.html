@@ -1,29 +1,57 @@
 <!doctype html>
 <html lang="zh-TW">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <title>HackTimeline</title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>HackTimeline</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <link rel="stylesheet" href="css/normalize.css">
-        <link rel="stylesheet" href="css/main.css">
-        <script src="js/vendor/modernizr-2.8.3.min.js"></script>
-    </head>
-    <body>
-        <!--[if lt IE 8]>
-            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-        <![endif]-->
+    <!-- <link rel="stylesheet" href="css/normalize.css"> -->
+    <!-- <link rel="stylesheet" href="css/main.css"> -->
+    <link rel="stylesheet" href="https://unpkg.com/tachyons@4.6.1/css/tachyons.min.css"/>
+    <script src="js/vendor/modernizr-2.8.3.min.js"></script>
+  </head>
+  <body class="code pa3">
+    <!--[if lt IE 8]>
+        <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
 
-        <!-- Add your site or application content here -->
-        <p>Hello world! This is HTML5 Boilerplate.</p>
+    <!-- Add your site or application content here -->
 
-        <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
-        <script src="js/vendor/jquery-1.12.0.min.js"></script>
-        <script src="js/spreadsheet.js"></script>
-        <script src="https://apis.google.com/js/client.js?onload=_clientOnload"></script>
+    <form id="spreadsheet" class="ba pa2 w-30">
+      <h1 class="f4 mt0">讀取時間軸</h1>
+      <label for="spreadsheet-id" class="mb2">Spreadsheet ID</label>
+      <input type="text" id="spreadsheet-id" class="code db w-100 pa2 mb3" value="1E7TOSa_G2nFeXmMT7V4aIKlt1Ef2xjhYbHx_3WEcoNg">
+      <label for="sheet-names" class="mb2">Name of sheets</label>
+      <input type="text" id="sheet-names" class="code db w-100 pa2 mb3" value="民法 972 條, 一例一休">
+      <button type="submit" class="code pa2 border bg-transparent ba">讀取</button>
+    </form>
 
-        <script src="js/main.js"></script>
-    </body>
+    <form id="entry-form" class="absolute bg-white-90 right-1 ba pa2 w-30" hidden>
+      <button type="button" class="fr bg-transparent bn" id="close-entry-form">&times;</button>
+
+      <h1 class="f4 mt0">新增事件</h1>
+      <label for="Timeline-select">Timeline</label>
+      <select id="Timeline-select" class="code db w-100 pa2 mb3 mt1"></select>
+      <label for="Date">Date</label>
+      <input id="Date" type="text" class="code db w-100 pa2 mb3" value="2016/12/26">
+      <label for="Time">Time</label>
+      <input id="Time" type="text" class="code db w-100 pa2 mb3" value="09:00">
+      <label for="Location">Location</label>
+      <input id="Location" type="text" class="code db w-100 pa2 mb3" value="立法院前">
+      <label for="Description">Description</label>
+      <input id="Description" type="text" class="code db w-100 pa2 mb3" value="爭取婚姻平權 用愛守護立院">
+
+      <button type="submit" class="code pa2 bg-transparent ba">新增</button>
+    </form>
+
+    <div id="timeline-container"></div>
+
+    <script src="js/vendor/jquery-1.12.0.min.js"></script>
+    <script src="js/spreadsheet.js"></script>
+    <script src="https://apis.google.com/js/client.js?onload=_clientOnload"></script>
+
+    <script src="js/main.js"></script>
+  </body>
 </html>
