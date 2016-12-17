@@ -4,22 +4,40 @@ const form = document.getElementById('spreadsheet')
 const entryForm = document.getElementById('entry-form')
 const container = document.getElementById('timeline-container')
 const loadBtn = document.getElementById('load-spreadsheet')
+
+const spreadsheetIdField = document.getElementById('spreadsheet-id')
+const sheetsField = document.getElementById('sheet-names')
+
 let spreadsheetData = {}
 
+parseQuery()
 entryForm.querySelector('#close-entry-form').addEventListener('click', e => entryForm.hidden = true)
 
 form.addEventListener('submit', (e) => {
-  e.preventDefault()
-  const spreadsheetId = form.querySelector('#spreadsheet-id').value.trim()
-  const sheets = form.querySelector('#sheet-names').value.split(',').map(name => name.trim())
+  spreadsheetIdField.value = spreadsheetIdField.value.replace(/\s/g, '')
+  sheetsField.value = sheetsField.value.replace(/\s/g, '')
+})
 
+function parseQuery () {
+  const params = {}
+  location.search.substr(1).split('&').forEach(t => params[t.split('=')[0]] = decodeURIComponent(t.split('=')[1]))
+
+  if(params.spreadsheetId && params.sheets) {
+    spreadsheetIdField.value = params.spreadsheetId
+    sheetsField.value = params.sheets.split(',').map(name => name.trim())
+
+    loadSpreadsheetData(params.spreadsheetId, sheetsField.value.split(','))
+  }
+}
+
+function loadSpreadsheetData (spreadsheetId, sheets) {
   spreadsheet.readSheets(spreadsheetId, sheets).then(renderData)
   updateEntryForm(spreadsheetId, sheets)
   loadBtn.innerText = 'Loaded: ' + spreadsheetId
 
   form.hidden = true
   container.hidden = false
-})
+}
 
 entryForm.addEventListener('submit', (e) => {
   e.preventDefault()
@@ -140,7 +158,6 @@ function renderTimeline( spreadsheet, container ) {
             }
 
             if( timelineItem.start ) {
-                console.log( timelineItem );
                 timelineItems.push( timelineItem );
             }
         });
