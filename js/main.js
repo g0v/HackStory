@@ -33,6 +33,7 @@ function parseQuery () {
 function loadSpreadsheetData (spreadsheetId, sheets) {
   spreadsheet.readSheets(spreadsheetId, sheets).then(renderData)
   updateEntryForm(spreadsheetId, sheets)
+  loadBtn.hidden = false
   loadBtn.innerText = 'Loaded: ' + spreadsheetId
 
   form.hidden = true
