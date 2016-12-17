@@ -55,6 +55,12 @@ function updateEntryForm (spreadsheetId, sheets) {
   })
 }
 
+document.addEventListener('click', e => {
+  if (e.target.getAttribute('data-timeline')) {
+    openEntryForm(e)
+  }
+})
+
 function openEntryForm (e) {
   entryForm.hidden = false
   entryForm.querySelector('#Timeline-select').value = e.target.getAttribute('data-timeline')
@@ -66,26 +72,18 @@ function renderData (data) {
   // Timeline render code goes here, @ddio feel free to nuke this part
   container.innerHTML = ''
 
-  Object.keys(spreadsheetData).forEach(timelineName => {
-    const timelineAction = document.createElement('div')
-    timelineAction.className = 'mb3 nowrap overflow-auto'
+  // Object.keys(spreadsheetData).forEach(timelineName => {
+  //   const timelineAction = document.createElement('div')
+  //   timelineAction.className = 'mb3 nowrap overflow-auto'
 
-    const h1 = document.createElement('h1')
-    h1.className ='cf f4 dib mt0'
-    h1.innerText = timelineName
+  //   const h1 = document.createElement('h1')
+  //   h1.className ='cf f4 dib mt0'
+  //   h1.innerText = timelineName
 
-    const newEntry = document.createElement('button')
-    newEntry.type = 'button'
-    newEntry.innerText = '新增事件'
-    newEntry.className = 'ml3 f5 ba bg-transparent pa2 fw6 v-baseline pointer'
-    newEntry.setAttribute('data-timeline', timelineName)
-    newEntry.addEventListener('click', openEntryForm)
+  //   container.appendChild(h1)
 
-    h1.appendChild(newEntry)
-    container.appendChild(h1)
-
-    container.appendChild(timelineAction)
-  })
+  //   container.appendChild(timelineAction)
+  // })
 
   const timeline = document.createElement('div')
   container.appendChild(timeline)
@@ -116,10 +114,20 @@ function renderTimeline( spreadsheet, container ) {
 
     for( var sheetName in spreadsheet ) {
 
+        const sheetNameLabel = document.createElement('span')
+        sheetNameLabel.innerText = sheetName
+        sheetNameLabel.className = 'mr3'
+
+        const newEntry = document.createElement('button')
+        newEntry.type = 'button'
+        newEntry.innerText = '新增'
+        newEntry.className = 'mt1 ba db f6 bg-transparent pa1 fw6 v-baseline pointer'
+        newEntry.setAttribute('data-timeline', sheetName)
+
         curGroupId++;
         groups.push({
             id: curGroupId,
-            content: sheetName,
+            content: sheetNameLabel.outerHTML + newEntry.outerHTML,
         });
 
         var sheet = spreadsheet[ sheetName ];
