@@ -84,9 +84,9 @@ function renderData (data) {
     container.appendChild(timelineAction)
   })
 
-  const timeline = document.createElement('div');
-  container.appendChild(timeline);
-  renderTimeline( data, timeline );
+  const timeline = document.createElement('div')
+  container.appendChild(timeline)
+  renderTimeline(spreadsheetData, timeline)
 }
 
 const sheetHeaders = {
