@@ -180,7 +180,7 @@ function renderTimeline( spreadsheet, container ) {
 function generateHTML (item) {
   html = ''
   if (item.title) html += '<h3 class="mt0 f5 mb1">' + item.title + '</h3>'
-  if (item.content) html += '<p class="mt1 f6">' + item.content + '</p>'
+  if (item.content) html += `<p class="mv1 f6 mw5 truncate" title="${item.content}">${item.content}</p>`
   if (item.location) html += '<span class="fw4 f6 black-80">@ ' + item.location + '</span>'
 
   return '<div class="ma1">' + html + '</div>'
