@@ -37,6 +37,8 @@ function loadSpreadsheetData (spreadsheetId, sheets) {
 
   form.hidden = true
   container.hidden = false
+  container.classList.add('pv5')
+  container.innerText = '讀取中'
 }
 
 entryForm.addEventListener('submit', (e) => {
@@ -88,6 +90,7 @@ function openEntryForm (e) {
 function renderData (data) {
   if (data) spreadsheetData = data
 
+  container.classList.remove('pv5')
   container.innerHTML = ''
   renderTimeline(spreadsheetData, container)
 }
