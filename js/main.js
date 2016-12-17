@@ -69,25 +69,8 @@ function openEntryForm (e) {
 function renderData (data) {
   if (data) spreadsheetData = data
 
-  // Timeline render code goes here, @ddio feel free to nuke this part
   container.innerHTML = ''
-
-  // Object.keys(spreadsheetData).forEach(timelineName => {
-  //   const timelineAction = document.createElement('div')
-  //   timelineAction.className = 'mb3 nowrap overflow-auto'
-
-  //   const h1 = document.createElement('h1')
-  //   h1.className ='cf f4 dib mt0'
-  //   h1.innerText = timelineName
-
-  //   container.appendChild(h1)
-
-  //   container.appendChild(timelineAction)
-  // })
-
-  const timeline = document.createElement('div')
-  container.appendChild(timeline)
-  renderTimeline(spreadsheetData, timeline)
+  renderTimeline(spreadsheetData, container)
 }
 
 const sheetHeaders = {
