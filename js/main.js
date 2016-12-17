@@ -57,7 +57,7 @@ function renderData (data) {
 
   Object.keys(spreadsheetData).forEach(timelineName => {
     const timeline = document.createElement('div')
-    timeline.className = 'mb3'
+    timeline.className = 'mb3 nowrap overflow-auto'
 
     const h1 = document.createElement('h1')
     h1.className ='cf f4 dib mt0'
@@ -76,7 +76,7 @@ function renderData (data) {
     spreadsheetData[timelineName].forEach((fields, i) => {
       if (i === 0) return
       const div = document.createElement('div')
-      div.className = 'dib mr2 pa2 v-middle h4 w5 overflow-auto ba'
+      div.className = 'dib mr2 pa2 v-middle h4 w5 overflow-auto ba ws-normal'
       div.innerHTML = fields.map((v, i) => headers[i] + ': ' + v).join('<br>')
       timeline.appendChild(div)
     })
