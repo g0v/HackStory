@@ -42,6 +42,7 @@ entryForm.addEventListener('submit', (e) => {
 })
 
 loadBtn.addEventListener('click', (e) => {
+  entryForm.hidden = true
   container.hidden = form.hidden
   form.hidden = !form.hidden
 })
