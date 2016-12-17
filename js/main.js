@@ -120,9 +120,9 @@ function renderTimeline( spreadsheet, container ) {
 
     for( var sheetName in spreadsheet ) {
 
-        const sheetNameLabel = document.createElement('span')
+        const sheetNameLabel = document.createElement('h2')
         sheetNameLabel.innerText = sheetName
-        sheetNameLabel.className = 'mr3'
+        sheetNameLabel.className = 'mr3  f5 mt0'
 
         const newEntry = document.createElement('button')
         newEntry.type = 'button'
@@ -170,7 +170,7 @@ function renderTimeline( spreadsheet, container ) {
     var opts = {
         template: function( item ) {
             if( item.title ) {
-                return '<h4>' + item.title + '</h4>' + item.content;
+                return '<h3 class="mt0 f5 mb1">' + item.title + '</h3>' + item.content;
             }
             return item.content;
         }

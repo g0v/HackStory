@@ -7,7 +7,7 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://unpkg.com/tachyons@4.6.1/css/tachyons.min.css"/>
-        <link rel="stylesheet" href="css/vis.min.css">
+    <link rel="stylesheet" href="css/vis.min.css">
     <script src="js/vendor/modernizr-2.8.3.min.js"></script>
   </head>
   <body class="sans-serif fw-4 ph3 pt5">
@@ -20,11 +20,11 @@
       <button type="button" class="ma3 truncate mw4 pointer fr f6 pa1 bg-transparent ba b--white white code f6 fw4" id="load-spreadsheet" hidden>
         讀取
       </button>
-      <a href="/" class="white mv1 fw6 pa3 dib no-underline">HackStory</a>
+      <a href="/" class="no-underline"><h1 class="white f5 mv1 fw6 pa3 dib">HackStory</h1></a>
     </header>
 
     <form id="spreadsheet" class="border-box mv3 ba pa3 mw6 w-100 center b--light-silver">
-      <h1 class="f4 mt0">讀取時間軸</h1>
+      <h2 class="f4 mt0">讀取時間軸</h2>
       <label for="spreadsheet-id" class="mb2 db">Spreadsheet ID</label>
       <input type="text" name="spreadsheetId" id="spreadsheet-id" class="code db w-100 pa2 mb3" value="11hHSbluBcNfMYppvSMTfB9Pg4fHmJMvmduoaHFCXREE">
       <label for="sheet-names" class="mb2 db">Name of sheets</label>
@@ -35,7 +35,7 @@
     <form id="entry-form" class="absolute bg-white-90 ma3 right-1 ba pa3 w-100 mw5 z-9999" hidden>
       <button type="button" class="fr bg-transparent bn" id="close-entry-form">&times;</button>
 
-      <h1 class="f4 mt0">新增事件</h1>
+      <h2 class="f4 mt0">新增事件</h2>
       <label for="Timeline-select" class="mb2 db">Timeline</label>
       <select id="Timeline-select" class="code db w-100 pa2 mb3 mt1"></select>
       <label for="Date" class="mb2 db">Date</label>
