@@ -1,7 +1,8 @@
-# HackTimeline
-HackTimeline共筆時間軸 (prototype)
+# HackStory
 
-Prototype: http://g0v.github.io/HackTimeline/
+HackStory 共筆時間軸 (prototype)
+
+Prototype: http://g0v.github.io/HackStory/
 
 ## Development
 
