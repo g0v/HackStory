@@ -3,6 +3,11 @@ const form = document.getElementById('spreadsheet')
 const entryForm = document.getElementById('entry-form')
 const container = document.getElementById('timeline-container')
 const loadBtn = document.getElementById('load-spreadsheet')
+const viewToolsForm = document.getElementById('view-tools-form')
+const viewByDay = document.getElementById('view-by-day')
+const viewByWeek = document.getElementById('view-by-week')
+const viewByMonth = document.getElementById('view-by-month')
+const viewByYear = document.getElementById('view-by-year')
 
 const spreadsheetIdField = document.getElementById('spreadsheet-id')
 const sheetsField = document.getElementById('sheet-names')
@@ -168,13 +173,60 @@ function renderTimeline( spreadsheet, container ) {
         });
     }
 
-    var opts = {
-        template: function( item ) {
-          return generateHTML(item);
-        }
-    }
+    const SHOW_BY_DAY = 86400 * 1000;
+    const SHOW_BY_WEEK = SHOW_BY_DAY * 7;
+    const SHOW_BY_MONTH = SHOW_BY_DAY * 30;
+    const SHOW_BY_YEAR = SHOW_BY_DAY * 365;
 
-    var tl = new vis.Timeline( container, timelineItems, groups, opts );
+    var opts = {
+        template: function (item) {
+          return generateHTML(item);
+        },
+        horizontalScroll: true,
+        verticalScroll: false,
+        zoomable: false
+    };
+
+    window.timeline = new vis.Timeline( container, timelineItems, groups, opts );
+
+    timeline.setZoomInterval = function (inteval) {
+        let range = timeline.getWindow();
+        let start = range.start.valueOf();
+        let end = range.end.valueOf();
+
+        this.setOptions({
+            zoomMin: inteval,
+            zoomMax: inteval
+        });
+
+        // force rerender timeline
+        this.setWindow({ start, end });
+
+        // reposition
+        this.moveTo((end - start) / 2 + start);
+    };
+
+    viewByDay.onclick = function () {
+        timeline.setZoomInterval(SHOW_BY_DAY);
+    };
+
+    viewByWeek.onclick = function () {
+        timeline.setZoomInterval(SHOW_BY_WEEK);
+    };
+
+    viewByMonth.onclick = function () {
+        timeline.setZoomInterval(SHOW_BY_MONTH);
+    };
+
+    viewByYear.onclick = function () {
+        timeline.setZoomInterval(SHOW_BY_YEAR);
+    };
+
+    // init view
+    viewToolsForm.hidden = false;
+    timeline.moveTo(new Date);
+    viewByYear.click();
+
 }
 
 function generateHTML (item) {
