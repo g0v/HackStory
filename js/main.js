@@ -23,7 +23,7 @@ form.addEventListener('submit', (e) => {
 })
 
 function parseQuery () {
-  const params = {}
+  var params = {}
   location.search.substr(1).split('&').forEach(t => params[t.split('=')[0]] = decodeURIComponent(t.split('=')[1]))
 
   if(params.spreadsheetId && params.sheets) {
@@ -32,6 +32,22 @@ function parseQuery () {
 
     loadSpreadsheetData(params.spreadsheetId, sheetsField.value.split(','))
   }
+}
+
+function appendSheetOnQuery(sheetName) {
+    var params = {};
+    var query = '';
+    location.search.substr(1).split('&').forEach(t => params[t.split('=')[0]] = decodeURIComponent(t.split('=')[1]))
+
+    if(params.spreadsheetId && params.sheets) {
+        params.spreadsheetId
+        sheets = params.sheets.split(',').map(name => name.trim().replace('\/', ''))
+        sheets.push(sheetName);
+        params.sheets = sheets.join(',');
+        query =  '?spreadsheetId=' + params.spreadsheetId + '&' + 'sheets=' + params.sheets;
+    }
+
+    window.location = query
 }
 
 function loadSpreadsheetData (spreadsheetId, sheets) {
@@ -122,7 +138,6 @@ function renderTimeline( spreadsheet, container ) {
         curGroupId = 0, // just to make it unique in this page
         timelineItems = [],
         groups = [];
-
     for( var sheetName in spreadsheet ) {
 
         const sheetNameLabel = document.createElement('h2')
@@ -177,6 +192,20 @@ function renderTimeline( spreadsheet, container ) {
     const SHOW_BY_WEEK = SHOW_BY_DAY * 7;
     const SHOW_BY_MONTH = SHOW_BY_DAY * 30;
     const SHOW_BY_YEAR = SHOW_BY_DAY * 365;
+    // TODO reduce duplicate code
+    var sheetNameLabel = document.createElement('input');
+    sheetNameLabel.className = 'mr3  f5 mt0 add-sheet-name';
+
+    var newEntry = document.createElement('button')
+    newEntry.type = 'button'
+    newEntry.innerText = '新增時間軸'
+    newEntry.className = 'mt1 ba db f6 bg-transparent pa1 fw6 v-baseline pointer add-sheet'
+    newEntry.setAttribute('data-timeline', "")
+    curGroupId++;
+    groups.push({
+        id: curGroupId,
+        content: sheetNameLabel.outerHTML + newEntry.outerHTML,
+    });
 
     var opts = {
         template: function (item) {
@@ -227,6 +256,24 @@ function renderTimeline( spreadsheet, container ) {
     timeline.moveTo(new Date);
     viewByYear.click();
 
+
+    document.querySelector('.add-sheet').addEventListener('click', function (e) {
+        var that = this;
+        window.spreadsheet.appendSheet(
+            spreadsheetIdField.value,
+            this.parentNode.querySelector('.add-sheet-name').value
+        ).then(function () {
+            // TODO don't use refresh
+            appendSheetOnQuery(
+                that.parentNode.querySelector('.add-sheet-name').value
+            );
+        });
+
+    });
+}
+
+function addTimeline() {
+    console.log(groups);
 }
 
 function generateHTML (item) {

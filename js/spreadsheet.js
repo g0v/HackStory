@@ -67,6 +67,23 @@ function appendRow(spreadSheetId, sheetName, row) {
   })))
   .then(response => getIn(response)(['result', 'updates']));
 }
+function appendSheet(spreadSheetId, sheetName) {
+  return getClient()
+          .then(() => authorize(false))
+        .then(() => es6Promisify(gapi.client.sheets.spreadsheets.batchUpdate({
+          spreadsheetId: spreadSheetId,
+          requests:[
+            {
+              "addSheet": {
+                "properties": {
+                  "title": sheetName,
+                }
+              }
+            }
+          ]
+          })))
+        .then(response => getIn(response)(['result', 'updates']));
+}
 
 function create(spreadsheet = {}) {
   let spreadsheetId;
@@ -165,6 +182,7 @@ function es6Promisify(thenable) {
 window.spreadsheet = {
   readSheets,
   appendRow,
+  appendSheet,
   create,
 };
 
