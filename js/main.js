@@ -23,7 +23,7 @@ function parseQuery () {
 
   if(params.spreadsheetId && params.sheets) {
     spreadsheetIdField.value = params.spreadsheetId
-    sheetsField.value = params.sheets.split(',').map(name => name.trim())
+    sheetsField.value = params.sheets.split(',').map(name => name.trim().replace('\/', ''))
 
     loadSpreadsheetData(params.spreadsheetId, sheetsField.value.split(','))
   }
