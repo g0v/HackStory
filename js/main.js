@@ -138,6 +138,8 @@ function renderTimeline( spreadsheet, container ) {
         timelineItems = [],
         groups = [],
 		firstEventDate;
+    const today = new Date();
+	
     for( var sheetName in spreadsheet ) {
 
         const sheetNameLabel = document.createElement('h2')
@@ -201,7 +203,6 @@ function renderTimeline( spreadsheet, container ) {
         });
     }
 
-	const today = new Date();
     const SHOW_BY_DAY = 86400 * 1000;
     const SHOW_BY_WEEK = SHOW_BY_DAY * 7;
     const SHOW_BY_MONTH = SHOW_BY_DAY * 30;
