@@ -8,7 +8,6 @@ const viewByDay = document.getElementById('view-by-day')
 const viewByWeek = document.getElementById('view-by-week')
 const viewByMonth = document.getElementById('view-by-month')
 const viewByYear = document.getElementById('view-by-year')
-
 const spreadsheetIdField = document.getElementById('spreadsheet-id')
 const sheetsField = document.getElementById('sheet-names')
 
@@ -137,7 +136,8 @@ function renderTimeline( spreadsheet, container ) {
     var curEventId = 0, // just to make it unique in this page
         curGroupId = 0, // just to make it unique in this page
         timelineItems = [],
-        groups = [];
+        groups = [],
+		firstEventDate;
     for( var sheetName in spreadsheet ) {
 
         const sheetNameLabel = document.createElement('h2')
@@ -159,7 +159,7 @@ function renderTimeline( spreadsheet, container ) {
         var sheet = spreadsheet[ sheetName ];
         sheet.shift();
 
-        sheet.forEach( row => {
+        sheet.forEach( (row, index) => {
             curEventId++;
 
             var timelineItem = {
@@ -170,13 +170,17 @@ function renderTimeline( spreadsheet, container ) {
                 group: curGroupId,
             };
 
-            if( row[ sheetHeaders.startDate ] ) {
+			if( row[ sheetHeaders.startDate ] ) {
 
                 timelineItem.start = row[ sheetHeaders.startDate ] + ' ' + row[ sheetHeaders.startTime ];
 
                 if( row[ sheetHeaders.endDate ] ) {
                     timelineItem.end = row[ sheetHeaders.endDate ] + ' ' + row[ sheetHeaders.endTime ];
                 }
+				
+				if(index===0) {
+					firstEventDate = new Date(row[ sheetHeaders.startDate ]);
+				};
 
             } else if( row[ sheetHeaders.endDate ] ) {
                 timelineItem.start = row[ sheetHeaders.endDate ] + ' ' + row[ sheetHeaders.endTime ];
@@ -188,6 +192,7 @@ function renderTimeline( spreadsheet, container ) {
         });
     }
 
+	const today = new Date();
     const SHOW_BY_DAY = 86400 * 1000;
     const SHOW_BY_WEEK = SHOW_BY_DAY * 7;
     const SHOW_BY_MONTH = SHOW_BY_DAY * 30;
@@ -206,8 +211,13 @@ function renderTimeline( spreadsheet, container ) {
         id: curGroupId,
         content: sheetNameLabel.outerHTML + newEntry.outerHTML,
     });
+	
+	let opt_limit_Max = today.setDate(today.getDate()+7);
+	let opt_limit_Min = firstEventDate?firstEventDate.setDate(firstEventDate.getDate()-7):"2000-01-01";
 
     var opts = {
+		min: opt_limit_Min,
+		max: opt_limit_Max,
         template: function (item) {
           return generateHTML(item);
         },
@@ -250,10 +260,10 @@ function renderTimeline( spreadsheet, container ) {
     viewByYear.onclick = function () {
         timeline.setZoomInterval(SHOW_BY_YEAR);
     };
-
+	
     // init view
     viewToolsForm.hidden = false;
-    timeline.moveTo(new Date);
+    timeline.moveTo(today);
     viewByYear.click();
 
 
