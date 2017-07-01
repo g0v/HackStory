@@ -184,7 +184,9 @@ function renderTimeline( spreadsheet, container ) {
 					if(firstEventDate){
 						let startTime = today.getTime()-startDate.getTime();
 						let currentFirstEventTime = today.getTime()-firstEventDate.getTime();
-						startTime < currentFirstEventTime ?　continue : return;
+						if(startTime < currentFirstEventTime){
+							return;
+						}
 					}
 					firstEventDate = startDate;
 				};
