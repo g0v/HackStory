@@ -179,14 +179,7 @@ function renderTimeline( spreadsheet, container ) {
                 }
 				
 				if(index===0) {
-					let startDate = new Date(row[ sheetHeaders.startDate ]);
-					//find the first event among the requested sheet
-					if(firstEventDate){
-						let startTime = today.getTime()-startDate.getTime();
-						let currentFirstEventTime = today.getTime()-firstEventDate.getTime();
-						startTime < currentFirstEventTime ?　continue : return;
-					}
-					firstEventDate = startDate;
+					firstEventDate = new Date(row[ sheetHeaders.startDate ]);
 				};
 
             } else if( row[ sheetHeaders.endDate ] ) {
@@ -272,8 +265,7 @@ function renderTimeline( spreadsheet, container ) {
     viewToolsForm.hidden = false;
     timeline.moveTo(today);
     viewByYear.click();
-	// init view whole pic
-	timeline.setWindow(opts.min, opts.max);
+
 
     document.querySelector('.add-sheet').addEventListener('click', function (e) {
         var that = this;
