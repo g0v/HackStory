@@ -238,14 +238,14 @@ function renderTimeline( spreadsheet, container ) {
 
     window.timeline = new vis.Timeline( container, timelineItems, groups, opts );
 
-    timeline.setZoomInterval = function (inteval) {
+    timeline.setZoomInterval = function (interval) {
         let range = timeline.getWindow();
         let start = range.start.valueOf();
         let end = range.end.valueOf();
 
         this.setOptions({
-            zoomMin: inteval,
-            zoomMax: inteval
+            zoomMin: interval,
+            zoomMax: interval
         });
 
         // force rerender timeline
